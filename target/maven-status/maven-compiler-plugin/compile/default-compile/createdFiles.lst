@@ -1,0 +1,6 @@
+org/elasticsearch/script/SimilarityEngine$1$1.class
+org/elasticsearch/script/SimilarityEngine$1.class
+org/elasticsearch/script/SimilarityEngine.class
+org/elasticsearch/plugin/SimilarityPlugin.class
+org/elasticsearch/utils/DistanceUtils.class
+org/elasticsearch/utils/SimilarityUtils.class
