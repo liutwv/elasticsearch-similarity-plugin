@@ -6,7 +6,7 @@
 
     <groupId>org.elasticsearch.plugin</groupId>
     <artifactId>similarity</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
 
     <description>ElasticSearch Plugin for Distance Similarity, include hamming, cos, euclidean and levenshtein</description>
 

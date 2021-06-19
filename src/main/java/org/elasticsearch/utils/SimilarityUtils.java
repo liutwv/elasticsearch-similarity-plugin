@@ -7,8 +7,10 @@ package org.elasticsearch.utils;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import org.elasticsearch.common.util.set.Sets;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 /**
  * 相似性计算工具类
@@ -77,6 +79,8 @@ public class SimilarityUtils {
 
     /**
      * 计算两个直方图JSON数值直接的余弦值
+     * (a1 * b1 + a2 * b2 + ... + an * bn) / √(a1^2 + a2^2 + ... + an^2) * √(b1^2 + b2^2 + ... + bn^2)
+     *
      * @param json1
      * @param json2
      * @return
@@ -90,21 +94,36 @@ public class SimilarityUtils {
 
         int sum1 = 0;
         int sum2 = 0;
-        int sumMixd = 0;
+        int sumMixed = 0;
         try {
             JSONObject jsonObj1 = JSON.parseObject(json1);
             JSONObject jsonObj2 = JSON.parseObject(json2);
 
-            for (int i = 0; i < 512; i++) {
-                int v1 = jsonObj1.getInteger(i + "") == null ? 0 : jsonObj1.getInteger(i + "");
-                int v2 = jsonObj2.getInteger(i + "") == null ? 0 : jsonObj2.getInteger(i + "");
+            Set<String> keySet1 = jsonObj1.keySet();
+            Set<String> keySet2 = jsonObj2.keySet();
+            Set<String> keySet = Sets.newHashSet();
+            keySet.addAll(keySet1);
+            keySet.addAll(keySet2);
 
+            for (String key : keySet) {
+                Integer v1 = jsonObj1.getInteger(key);
+                if (v1 == null) {
+                    v1 = 0;
+                }
+                Integer v2 = jsonObj2.getInteger(key);
+                if (v2 == null) {
+                    v2 = 0;
+                }
+
+                /**
+                 * 平方和
+                 */
                 sum1 += Math.pow(v1, 2);
                 sum2 += Math.pow(v2, 2);
-                sumMixd += v1 * v2;
+                sumMixed += v1 * v2;
             }
 
-            return new BigDecimal(sumMixd).divide(new BigDecimal(Math.sqrt(sum1)).multiply(new BigDecimal(Math.sqrt(sum2))), SCALE, BigDecimal.ROUND_HALF_UP).doubleValue();
+            return new BigDecimal(sumMixed).divide(new BigDecimal(Math.sqrt(sum1)).multiply(new BigDecimal(Math.sqrt(sum2))), SCALE, BigDecimal.ROUND_HALF_UP).doubleValue();
         } catch (Exception e) {
             System.out.println(e);
             return 0d;
