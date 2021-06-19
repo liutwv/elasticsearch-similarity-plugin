@@ -104,29 +104,32 @@ public class SimilarityUtils {
             Set<String> keySet = Sets.newHashSet();
             keySet.addAll(keySet1);
             keySet.addAll(keySet2);
-
-            for (String key : keySet) {
-                Integer v1 = jsonObj1.getInteger(key);
-                if (v1 == null) {
-                    v1 = 0;
-                }
-                Integer v2 = jsonObj2.getInteger(key);
-                if (v2 == null) {
-                    v2 = 0;
-                }
-
-                /**
-                 * 平方和
-                 */
-                sum1 += Math.pow(v1, 2);
-                sum2 += Math.pow(v2, 2);
-                sumMixed += v1 * v2;
+            if (keySet.size() == 0) {
+                return 0;
             }
 
+            for (String key : keySet) {
+                int v1 = jsonObj1.getIntValue(key);
+                int v2 = jsonObj2.getIntValue(key);
+
+                if (v1 != 0) {
+                    sum1 += Math.pow(v1, 2);
+                }
+                if (v2 != 0) {
+                    sum2 += Math.pow(v2, 2);
+                }
+                if (v1 != 0 && v2 != 0) {
+                    sumMixed += v1 * v2;
+                }
+            }
+
+            if (sum1 == 0 || sum2 == 0) {
+                return 0;
+            }
             return new BigDecimal(sumMixed).divide(new BigDecimal(Math.sqrt(sum1)).multiply(new BigDecimal(Math.sqrt(sum2))), SCALE, BigDecimal.ROUND_HALF_UP).doubleValue();
         } catch (Exception e) {
             System.out.println(e);
-            return 0d;
+            return 0;
         }
     }
 
