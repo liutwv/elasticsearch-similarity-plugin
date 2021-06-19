@@ -8,12 +8,6 @@
 
 ---
 
-<em>
-目前只支持elasticsearch 7.6.0，如果要改版本，需要改pom.xml和plugin-descriptor.properties中的${elasticsearch.version}值
-</em>
-
-
-
 打包：
 
 `mvn clean package`
