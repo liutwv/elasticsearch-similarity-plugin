@@ -13,7 +13,7 @@
     <properties>
         <elasticsearch.version>[7.11.0,)</elasticsearch.version>
         <elasticsearch.plugin.classname>org.elasticsearch.plugin.SimilarityPlugin</elasticsearch.plugin.classname>
-        <fastjson.version>1.2.68</fastjson.version>
+        <fastjson.version>1.2.83</fastjson.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
